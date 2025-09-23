@@ -1,0 +1,5 @@
+Iteration 1 :
+Book Management
+- Add Books: Authenticated users can add books (title, author, genre, year, description).
+- Edit/Delete Books: Only the user who added the book or an admin can edit/delete.
+- List/Search Books: Search by title, author, genre, or year.
