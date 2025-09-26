@@ -1,12 +1,14 @@
-const contoller = require('../controller/controller.book.js');
+const bookcontoller = require('../controller/controller.book.js');
+const reviewcontroller = require('../controller/controller.review.js');
 const { bookValidation } = require('../util/bookValidator.js');
 const { validator } = require('../middleware/validators.js')
 module.exports = app => {
     const route = require('express').Router();
     const bookPath = '/books'
-    route.post(bookPath,bookValidation,validator, contoller.addbook);
-    route.get(bookPath, contoller.findAllBooks);
-    route.delete(`${bookPath}/:id`, contoller.deleteABook)
-    route.put(`${bookPath}/:id`, contoller.updateBook)
+    route.post(bookPath,bookValidation,validator, bookcontoller.addbook);
+    route.post(`${bookPath}/:id/review`,reviewcontroller.addreview)
+    route.get(bookPath, bookcontoller.findAllBooks);
+    route.delete(`${bookPath}/:id`, bookcontoller.deleteABook)
+    route.put(`${bookPath}/:id`, bookcontoller.updateBook)
     app.use('/api', route);
 };
