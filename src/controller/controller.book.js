@@ -6,7 +6,7 @@ exports.addbook = async (req, res) => {
             title: req.body.title,
             author: req.body.author,
             genre: req.body.genre,
-            date: req.body.date,
+            publishedDate: req.body.date,
             description: req.body.description,
         })
         const data = await book.save()

@@ -21,7 +21,7 @@ exports.bookValidation = [
     body('author').trim().notEmpty().withMessage('author cant be empty').isLength({ max: 1000 })
         .withMessage('Title cannot be longer than 1000 characters'),
     body('genre').trim().notEmpty().withMessage('gener cant be empty').isIn(allowedGenres).withMessage(`Genre must be one of: ${allowedGenres.join(', ')} `),
-    body('date').trim().notEmpty().withMessage('date cant be empty').isISO8601().withMessage('date should be in yyyy-mm-dd format').custom(async date => {
+    body('publishedDate').trim().notEmpty().withMessage('date cant be empty').isISO8601().withMessage('date should be in yyyy-mm-dd format').custom(async date => {
         let inputdate = new Date(date);
         let todaysdate = new Date();
         console.log(inputdate, "input date");
