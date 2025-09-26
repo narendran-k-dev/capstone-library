@@ -19,8 +19,21 @@ exports.bookValidation = [
         }
     }),
     body('author').trim().notEmpty().withMessage('author cant be empty').isLength({ max: 1000 })
-        .withMessage('Title cannot be longer than 1000 characters'), ,
+        .withMessage('Title cannot be longer than 1000 characters'),
     body('genre').trim().notEmpty().withMessage('gener cant be empty').isIn(allowedGenres).withMessage(`Genre must be one of: ${allowedGenres.join(', ')} `),
-    body('year').trim().notEmpty().withMessage('year cant be empty').isFloat({ max: year }).withMessage(`year cant be greater than current year -> ${year}`)
+    body('date').trim().notEmpty().withMessage('date cant be empty').isISO8601().withMessage('date should be in yyyy-mm-dd format').custom(async date => {
+        let inputdate = new Date(date);
+        let todaysdate = new Date();
+        console.log(inputdate, "input date");
+        console.log(todaysdate, "today date ")
+        try {
+            if (inputdate > todaysdate) {
+                throw new Error('date cant be greater than todays date ')
+            }
+        }
+        catch (err) {
+            throw err;
+        }
+    })
 ]
 
