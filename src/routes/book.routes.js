@@ -7,6 +7,7 @@ module.exports = app => {
     const bookPath = '/books'
     route.post(bookPath,bookValidation,validator, bookcontoller.addbook);
     route.post(`${bookPath}/:id/review`,reviewcontroller.addreview)
+    route.get(`${bookPath}/:id/review`,reviewcontroller.getreview)
     route.get(bookPath, bookcontoller.findAllBooks);
     route.delete(`${bookPath}/:id`, bookcontoller.deleteABook)
     route.put(`${bookPath}/:id`, bookcontoller.updateBook)
