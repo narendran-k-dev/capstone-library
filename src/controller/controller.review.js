@@ -22,8 +22,15 @@ exports.addreview = async (request, response) => {
 exports.getreview = async (request, response) => {
     const bookId = request.params.id;
     try {
-        const reviews = await Review.find({ bookId }).populate('bookId');
+        const reviews = await Review.find({ bookId });
+        console.log(reviews.length)
+        if (reviews.length === 0) {
+            response.status(400).send({
+                message: ' oops no reviews found'
+            })
+        }
         response.status(200).send(reviews);
+
     } catch (err) {
         response.status(500).send({
             message: err.message || 'Error retrieving reviews for this book'
