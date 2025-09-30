@@ -5,6 +5,7 @@ const app = express();
 const PORT = 4000;
 const corsoption = { origin: 'http://localhost:8081' };
 const db = require('./src/model');
+require('dotenv').config();
 
 
 app.use(cors(corsoption));

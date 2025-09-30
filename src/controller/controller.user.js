@@ -1,13 +1,15 @@
 const db = require('../model')
 const User = db.User;
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
+const JWT_SECRET = process.env.JWT_SECRET
 exports.registerUser = async (request, resposne) => {
     try {
         const email = request?.body?.email
-        const emailcheck = await User.findOne({email})
-        if(emailcheck){
+        const emailcheck = await User.findOne({ email })
+        if (emailcheck) {
             return resposne.status(400).send({
-                message:'email already exsit'
+                message: 'email already exsit'
             })
         }
         const salt = await bcrypt.genSalt(10);
@@ -18,7 +20,9 @@ exports.registerUser = async (request, resposne) => {
             password: hashedPassword,
         })
         const data = await newUser.save();
-        resposne.send(data)
+        resposne.status(200).send({
+            message: 'user registration sucessfull !!'
+        })
     } catch (err) {
         resposne.status(400).send({
             message: err.message || ' error while registering user '
@@ -31,21 +35,22 @@ exports.loginUser = async (request, response) => {
     const password = request.body.password;
     try {
         const user = await User.findOne({ email });
-        if(!user){
+        if (!user) {
             return response.status(404).send({
                 message: 'email not found'
             })
         }
         const matchpassword = await bcrypt.compare(password, user.password)
         if (matchpassword) {
-            response.send('logged in successfull')
+            const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+            response.send(`loggedasdasd in successfull ${token}`)
         }
         else {
             response.status(400).send({
                 message: 'password does not match'
             })
         }
-    } catch(err) {
+    } catch (err) {
         response.status(400).send({
             message: err.message || 'error while login '
         })
