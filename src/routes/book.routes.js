@@ -22,7 +22,7 @@ module.exports = app => {
 
     route.delete(`${bookPath}/:id`,auth, bookcontoller.deleteABook)
 
-    route.put(`${bookPath}/:id`,auth, bookcontoller.updateBook)
+    route.put(`${bookPath}/:id`,auth, bookValidation, validator, bookcontoller.updateBook)
 
     app.use('/api', route);
 };

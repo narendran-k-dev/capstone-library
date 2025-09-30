@@ -6,6 +6,10 @@ module.exports = mongoose => {
       genre:String,
       publishedDate :Date,
       description: String,
+      createdById:{
+         type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', 
+      }
     },
     { timestamps: true }
   );
