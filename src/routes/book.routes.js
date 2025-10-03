@@ -6,7 +6,8 @@ const { reviewValidation } = require('../util/reviewValidator.js');
 const userController = require('../controller/controller.user.js')
 const { userValidator } = require('../util/userValidator.js')
 const auth = require('../middleware/jwtvalidator.js')
-const rateLimiter = require('../util/rateLimiter.js')
+const rateLimiter = require('../util/rateLimiter.js');
+const { updatebookvalidation } = require('../util/updatebookvalidator.js');
 
 module.exports = app => {
     const route = require('express').Router();
@@ -19,10 +20,11 @@ module.exports = app => {
     route.get('/login', rateLimiter,userController.loginUser)
     route.get(`${bookPath}/:id/review`,auth, reviewcontroller.getreview)
     route.get(bookPath,auth, bookcontoller.findAllBooks);
+    route.get('/profile/:id',auth,userController.viewprofie);
 
     route.delete(`${bookPath}/:id`,auth, bookcontoller.deleteABook)
 
-    route.put(`${bookPath}/:id`,auth, bookValidation, validator, bookcontoller.updateBook)
+    route.put(`${bookPath}/:id`,auth, updatebookvalidation, validator, bookcontoller.updateBook)
 
     app.use('/api', route);
 };

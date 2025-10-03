@@ -56,3 +56,25 @@ exports.loginUser = async (request, response) => {
         })
     }
 }
+
+exports.viewprofie = async (request, response) => {
+    try {
+        const id = await request.params.id;
+        if (!id) {
+            return response.status(400).send({
+                message: 'id cant be empty'
+            })
+        }
+        const newuser = await User.findById(id)
+        if (!newuser) {
+            return response.status(400).send({
+                message: 'no data found for the user id'
+            })
+        }
+        response.status(200).send(newuser)
+    } catch (error) {
+        response.status(400).send({
+            message: error.message || ' error while fetching user profile'
+        })
+    }
+}
