@@ -19,15 +19,19 @@
   "homepage": "https://github.com/narendran-k-dev/capstone-library#readme",
   "dependencies": {
     "bcryptjs": "^3.0.2",
-    "chai": "^6.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "express-rate-limit": "^8.1.0",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
-    "mocha": "^11.7.4",
     "mongoose": "^8.18.2",
     "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "chai": "^6.2.0",
+    "chai-http": "^5.1.2",
+    "mocha": "^11.7.4",
+    "sinon": "^21.0.0"
   }
 }
