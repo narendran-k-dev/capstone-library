@@ -19,6 +19,7 @@ module.exports = app => {
 
     route.get('/login', rateLimiter,userController.loginUser)
     route.get(`${bookPath}/:id/review`,auth, reviewcontroller.getreview)
+    route.get(`${bookPath}/:value`,bookcontoller.findInBooks)
     route.get(bookPath,auth, bookcontoller.findAllBooks);
     route.get('/profile/:id',auth,userController.viewprofie);
 

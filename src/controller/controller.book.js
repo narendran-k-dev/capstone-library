@@ -22,10 +22,7 @@ exports.addbook = async (req, res) => {
   }
 }
 exports.findAllBooks = (req, res) => {
-  const title = req.query.title;
-  var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
-
-  Book.find(condition)
+  Book.find()
     .then(data => {
       res.send(data);
     })
@@ -36,6 +33,31 @@ exports.findAllBooks = (req, res) => {
       });
     });
 };
+exports.findInBooks = async (req, res) => {
+  const value = req.params.value;
+  console.log(value,'valuevaluevaluevalue')
+  try {
+    const result = await Book.find({
+      $or: [
+        { title: new RegExp(value, 'i') },
+        { author: new RegExp(value, 'i') },
+        { genre: new RegExp(value, 'i') },
+        { description: new RegExp(value, 'i') }
+      ]
+    });
+
+    if (result.length > 0) {
+      res.status(200).send(result); 
+    } else {
+      res.status(404).send({ message: 'Oops, no book found' }); 
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || 'Error while searching book'
+    });
+  }
+};
+
 exports.deleteABook = async (req, res) => {
   const id = req.params.id;
   const userid = req.body.userid
