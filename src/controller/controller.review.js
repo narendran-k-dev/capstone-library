@@ -24,7 +24,6 @@ exports.getreview = async (request, response) => {
     const bookId = request.params.id;
     try {
         const reviews = await Review.find({ bookId });
-        console.log(reviews.length)
         if (reviews.length === 0) {
             response.status(400).send({
                 message: ' oops no reviews found'
@@ -41,7 +40,7 @@ exports.getreview = async (request, response) => {
 
 exports.deleteAReview = async (request, response) => {
     if (!request.body) {
-        return res.status(400).send({
+        return response.status(400).send({
             message: "Data to update can not be empty!"
         });
     }
@@ -50,8 +49,9 @@ exports.deleteAReview = async (request, response) => {
         const userid = request.body.userid;
         const newUser = await User.findById(userid)
         const newReview = await Review.findById(reviewId)
-
-
+        if (!newReview) {
+            return response.status(404).send({ message: 'couldnt find the review , check review id ' })
+        }
         if ((newUser.role === 'admin') || newUser._id.equals(newReview.userID)) {
 
             Review.findByIdAndDelete(reviewId, { useFindAndModify: false }).then(data => {
@@ -78,16 +78,19 @@ exports.deleteAReview = async (request, response) => {
 }
 
 exports.updateReviews = async (request, response) => {
-    const id = request.params.id;
-    const userid = request.body.userID
-    const newUser = await User.findById(userid)
-    const newReview = await Review.findById(id)
-    console.log(newUser, 'asdasdasd')
-    if (!request.body) {
+     if (!request.body) {
         return response.status(400).send({
             message: "Data to update can not be empty!"
         });
     }
+    const id = request.params.id;
+    const userid = request.body.userid
+    const newUser = await User.findById(userid)
+    const newReview = await Review.findById(id)
+     if (!newReview) {
+            return response.status(404).send({ message: 'couldnt find the review , check review id ' })
+        }
+   
     if (newUser.role === 'admin' || newUser._id.equals(newReview.userID)) {
 
         Review.findByIdAndUpdate(id, request.body, { useFindAndModify: false })
