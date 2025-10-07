@@ -78,3 +78,31 @@ exports.viewprofie = async (request, response) => {
         })
     }
 }
+
+exports.updateProfile = async (request, response) => {
+    const id = request.params.id;
+    const bodyUserid = request.body.userid
+    if (!id) {
+        return response.status(400).send({
+            message: 'need id to fetch user '
+        })
+    }
+    const checkuser = await User.findById(id)
+    if (checkuser.role === 'admin' || checkuser._id.equals(bodyUserid)) {
+        User.findByIdAndUpdate(id, request.body, { new: true }).then((data) => {
+            if (!data) {
+                return response.status(404).send({ message: 'no user found with given id=' + id })
+            } else {
+                return response.status(200).send({ message: ' user updated successfully' })
+            }
+        }).catch(err => {
+            response.status(400).send({
+                message: err.message || "Error updating user with id=" + id
+            });
+        });
+    } else {
+        return response.status(403).send({ message: 'sorry u wither have to be an admin or the user to edit profile' })
+    }
+
+
+}

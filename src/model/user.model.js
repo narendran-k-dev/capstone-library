@@ -5,11 +5,11 @@ module.exports = mongoose => {
         password: String,
         role: {
             type: String,
-            enum: ['user', 'admin'], 
+            enum: ['user', 'admin'],
             default: 'user'
         }
     }, {
-        timestamps: true
+        timestamps: true, optimisticConcurrency: true
     })
     const User = mongoose.model('User', schema)
     return User

@@ -21,13 +21,14 @@ module.exports = app => {
     route.get(`${bookPath}/:id/review`, auth, reviewcontroller.getreview)
     route.get(`${bookPath}/:value`, bookcontoller.findInBooks)
     route.get(bookPath, auth, bookcontoller.findAllBooks);
-    route.get('/profile/:id', auth, userController.viewprofie);
+    route.get('/profile/:id', userController.viewprofie);
 
     route.delete(`${bookPath}/:id`, auth, bookcontoller.deleteABook)
     route.delete(`${bookPath}/review/:id`, auth, reviewcontroller.deleteAReview)
-    
+
     route.put(`${bookPath}/:id`, auth, updatebookvalidation, validator, bookcontoller.updateBook)
     route.put(`${bookPath}/reviews/:id`, auth, reviewcontroller.updateReviews)
+    route.put('/profile/:id', userController.updateProfile);
 
     app.use('/api', route);
 };
