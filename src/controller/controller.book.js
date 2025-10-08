@@ -1,6 +1,7 @@
 const db = require('../model');
 const Book = db.Book;
 const User = db.User;
+const uploadFileMiddleware = require('../middleware/filemanagement.js')
 
 exports.addbook = async (req, res) => {
   try {
@@ -35,7 +36,6 @@ exports.findAllBooks = (req, res) => {
 };
 exports.findInBooks = async (req, res) => {
   const value = req.params.value;
-  console.log(value,'valuevaluevaluevalue')
   try {
     const result = await Book.find({
       $or: [
@@ -47,9 +47,9 @@ exports.findInBooks = async (req, res) => {
     });
 
     if (result.length > 0) {
-      res.status(200).send(result); 
+      res.status(200).send(result);
     } else {
-      res.status(404).send({ message: 'Oops, no book found' }); 
+      res.status(404).send({ message: 'Oops, no book found' });
     }
   } catch (err) {
     res.status(500).send({
@@ -121,3 +121,40 @@ exports.updateBook = async (req, res) => {
     })
   }
 };
+
+exports.uploadImage = async (request, response) => {
+  const bookid = request.params.bookid;
+  const userid = request.params.userid;
+  const newBook = await Book.findById(bookid)
+  const newuser = await User.findById(userid)
+
+  try {
+    if (!newBook) {
+      return response.status(404).send({
+        message: 'book not available please check id'
+      })
+    }
+    if (!newuser) {
+      return response.status(404).send({
+        message: 'user cant be validated please check id '
+      })
+    }
+    const bookownerid = newBook.createdById;
+    if (userid === bookownerid || newuser.role === 'admin') {
+      await uploadFileMiddleware(request, response).then((data) => {
+        response.status(200).send({
+          message: 'image uploaded successsfully'
+        })
+      })
+    } else {
+      response.status(403).send({
+        message: 'sry u dont access for this route , u either have to be admin or owner of the book'
+      })
+    }
+
+  } catch (err) {
+    response.status(400).send({
+      message: err.message || ' error while uploading image'
+    })
+  }
+}

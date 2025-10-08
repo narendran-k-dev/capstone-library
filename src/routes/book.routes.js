@@ -17,6 +17,7 @@ module.exports = app => {
     route.post('/register', userValidator, validator, userController.registerUser);
     route.post(bookPath, auth, bookValidation, validator, bookcontoller.addbook);
     route.post(`${bookPath}/:id/review`, auth, reviewValidation, validator, reviewcontroller.addreview)
+    route.post(`/user/:userid/book/:bookid/image`,bookcontoller.uploadImage)
 
     route.get('/login', rateLimiter, userController.loginUser)
     route.get(`${bookPath}/:id/review`, auth, reviewcontroller.getreview)
@@ -28,7 +29,7 @@ module.exports = app => {
     route.delete(`${bookPath}/:id`, auth, bookcontoller.deleteABook)
     route.delete(`${bookPath}/review/:id`, auth, reviewcontroller.deleteAReview)
     route.delete('/admin/reviews/:id', adminControl.deleteReview)
-
+ 
     route.put(`${bookPath}/:id`, auth, updatebookvalidation, validator, bookcontoller.updateBook)
     route.put(`${bookPath}/reviews/:id`, auth, reviewcontroller.updateReviews)
     route.put('/profile/:id',auth, userController.updateProfile);
