@@ -8,8 +8,9 @@ const MAX_SIZE = 20 * 1024 *1024
 const storage = multer.diskStorage({
     destination:(request,file,cb)=>{
         const bookId = request.params.bookid;
-        const uploadPath = path.join(__dirname,"../../resource",bookId)
-       
+        console.log(bookId)
+        const uploadPath = path.join(__dirname,"resource",bookId)
+        fs.mkdirSync(uploadPath,{recursive:true})
         cb(null,uploadPath)
     },
     filename:(request,file,cb)=>{
