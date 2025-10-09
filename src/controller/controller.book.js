@@ -159,20 +159,31 @@ exports.uploadImage = async (request, response) => {
   }
 }
 
-exports.downloadImage = async (request , response ) =>{
-  try{
+exports.downloadImage = async (request, response) => {
+  try {
     const bookId = request.params.bookId;
     const imageId = request.params.imageId;
+    const newBook = await Book.findById(bookid)
+
+    if (!bookId || !imageId) {
+      return response.status(400).send({
+        message: 'book id or image id cant be null/undefined '
+      })
+    }
+    if (!newBook) {
+      return response.status(400).send({
+        message: 'book not found please check the bookID'
+      })
+    }
     const filePath = path.join(__dirname, '../../resource', bookId, imageId);
-    console.log(filePath)
-     response.sendFile(filePath, err => {
-        if (err) {
-            response.status(404).send('Image not found');
-        }
+    response.sendFile(filePath, err => {
+      if (err) {
+        response.status(404).send('Image not found');
+      }
     });
-  }catch (err){
+  } catch (err) {
     response.status(400).send({
-      message:err.message || 'error while downlading image'
+      message: err.message || 'error while downlading image'
     })
   }
 }

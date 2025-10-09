@@ -25,7 +25,7 @@ module.exports = app => {
     route.get(bookPath, auth, bookcontoller.findAllBooks);
     route.get('/profile/:id', userController.viewprofie);
     route.get('/admin/users',auth, adminControl.viewAllUsers),
-    route.get(`${bookPath}/:bookId/image/:imageId`,bookcontoller.downloadImage)
+    route.get(`${bookPath}/:bookId/image/:imageId`,auth,bookcontoller.downloadImage)
 
     route.delete(`${bookPath}/:id`, auth, bookcontoller.deleteABook)
     route.delete(`${bookPath}/review/:id`, auth, reviewcontroller.deleteAReview)
