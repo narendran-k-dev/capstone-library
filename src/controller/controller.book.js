@@ -2,7 +2,7 @@ const db = require('../model');
 const Book = db.Book;
 const User = db.User;
 const uploadFileMiddleware = require('../middleware/filemanagement.js')
-
+const path = require('path')
 exports.addbook = async (req, res) => {
   try {
     const book = new Book({
@@ -155,6 +155,24 @@ exports.uploadImage = async (request, response) => {
   } catch (err) {
     response.status(400).send({
       message: err.message || ' error while uploading image'
+    })
+  }
+}
+
+exports.downloadImage = async (request , response ) =>{
+  try{
+    const bookId = request.params.bookId;
+    const imageId = request.params.imageId;
+    const filePath = path.join(__dirname, '../../resource', bookId, imageId);
+    console.log(filePath)
+     response.sendFile(filePath, err => {
+        if (err) {
+            response.status(404).send('Image not found');
+        }
+    });
+  }catch (err){
+    response.status(400).send({
+      message:err.message || 'error while downlading image'
     })
   }
 }
